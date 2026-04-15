@@ -6,7 +6,6 @@ import { Snippet } from "../snippets";
 
 export default function SnippetCard({ snippet }: { snippet: Snippet }) {
   const [copied, setCopied] = useState(false);
-  const [expanded, setExpanded] = useState(false);
 
   const handleCopy = async () => {
     try {
@@ -28,23 +27,12 @@ export default function SnippetCard({ snippet }: { snippet: Snippet }) {
 
   return (
     <div
-      className={`snippet-card ${expanded ? "expanded" : ""}`}
-      onClick={() => {
-        if (!expanded) {
-          setExpanded(true);
-          handleCopy();
-        }
-      }}
+      className={`snippet-card ${copied ? "copied" : ""}`}
+      onClick={handleCopy}
     >
       {/* Header */}
       <div className="card-header">
-
         <div className="card-actions" onClick={(e) => e.stopPropagation()}>
-          {expanded && (
-            <button className="collapse-btn" onClick={() => setExpanded(false)}>
-              ↑ collapse
-            </button>
-          )}
           <button
             className={`copy-btn ${copied ? "copied" : ""}`}
             onClick={handleCopy}
@@ -57,18 +45,11 @@ export default function SnippetCard({ snippet }: { snippet: Snippet }) {
       {/* Title row */}
       <div className="card-title-row">
         <h2 className="card-title">{snippet.title}</h2>
-        {!expanded && <span className="click-hint">click to copy</span>}
+        <span className="click-hint">{copied ? "Copied!" : "click to copy"}</span>
       </div>
 
       <p className="card-desc">{snippet.description}</p>
-
-
-      {/* Code block */}
-      {expanded && (
-        <div className="code-block" onClick={(e) => e.stopPropagation()}>
-          <pre><code>{snippet.code}</code></pre>
-        </div>
-      )}
     </div>
   );
 }
+
