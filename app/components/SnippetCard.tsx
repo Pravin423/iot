@@ -3,53 +3,36 @@
 import { useState } from "react";
 import { Snippet } from "../snippets";
 
-
 export default function SnippetCard({ snippet }: { snippet: Snippet }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(snippet.code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch {
-      // fallback
       const el = document.createElement("textarea");
       el.value = snippet.code;
       document.body.appendChild(el);
       el.select();
       document.execCommand("copy");
       document.body.removeChild(el);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div
-      className={`snippet-card ${copied ? "copied" : ""}`}
+      className={`snippet-card${copied ? " copied" : ""}`}
       onClick={handleCopy}
+      role="button"
+      aria-label={`Copy ${snippet.title} code`}
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && handleCopy()}
     >
-      {/* Header */}
-      <div className="card-header">
-        <div className="card-actions" onClick={(e) => e.stopPropagation()}>
-          <button
-            className={`copy-btn ${copied ? "copied" : ""}`}
-            onClick={handleCopy}
-          >
-            {copied ? "✓ copied!" : "copy"}
-          </button>
-        </div>
+      <div className="card-top">
+        <h2 className="card-title">{copied ? "✓ Copied!" : snippet.title}</h2>
       </div>
-
-      {/* Title row */}
-      <div className="card-title-row">
-        <h2 className="card-title">{snippet.title}</h2>
-        <span className="click-hint">{copied ? "Copied!" : "click to copy"}</span>
-      </div>
-
-      <p className="card-desc">{snippet.description}</p>
     </div>
   );
 }
-
