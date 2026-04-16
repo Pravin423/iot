@@ -745,14 +745,68 @@ if __name__ == "__main__":
   },
   {
     id: "prac-9",
-    title: "Prac 9 (Sentiment Analysis)",
-    description: "Simple sentiment analysis using TextBlob or NLTK.",
+    title: "Prac 9 (ASR NLP )",
+    description: "Automatic Speech Recognition integrated with a complete NLP preprocessing pipeline.",
     language: "python",
-    tags: ["textblob", "sentiment"],
-    code: `from textblob import TextBlob
-text = "I love this library! It is very easy to use."
-blob = TextBlob(text)
-print(blob.sentiment)`,
+    tags: ["speech-recognition", "asr", "nlp-pipeline"],
+    code: `!pip install SpeechRecognition pydub nltk
+!apt-get install ffmpeg -y
+
+import nltk
+import speech_recognition as sr
+from google.colab import files
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger_eng')
+
+def asr_nlp_pipeline(audio_file):
+    r = sr.Recognizer()
+
+    try:
+        with sr.AudioFile(audio_file) as source:
+            r.adjust_for_ambient_noise(source)
+            audio = r.record(source)
+
+        text = r.recognize_google(audio)
+    except:
+        print("Could not recognize audio")
+        return "", [], [], [], [], []
+
+    tokens = word_tokenize(text.lower())
+
+    stop_words = set(stopwords.words("english"))
+    filtered_words = [w for w in tokens if w.isalpha() and w not in stop_words]
+
+    ps = PorterStemmer()
+    stemmed_words = [ps.stem(w) for w in filtered_words]
+
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_words = [lemmatizer.lemmatize(w) for w in filtered_words]
+
+    pos_tags = nltk.pos_tag(filtered_words)
+
+    return text, tokens, filtered_words, stemmed_words, lemmatized_words, pos_tags
+
+
+print("Upload your WAV file:")
+uploaded = files.upload()
+
+for filename in uploaded.keys():
+    text, tokens, filtered, stemmed, lemmatized, pos = asr_nlp_pipeline(filename)
+
+    print("\\nRecognized Text:", text)
+    print("Tokens:", tokens)
+    print("After Stopword Removal:", filtered)
+    print("Stemmed Words:", stemmed)
+    print("Lemmatized Words:", lemmatized)
+    print("POS Tags:", pos)`,
   },
   {
     id: "prac-10",
