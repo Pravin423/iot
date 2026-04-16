@@ -388,16 +388,196 @@ print("\\nWeighted Edit Distance:", weighted_edit_distance_result)`,
   },
   {
     id: "prac-5",
-    title: "Prac 5 (Chunking)",
-    description: "Noun Phrase (NP) chunking using regex parser.",
+    title: "Prac 5 (N-grams, Prefix & Suffix)",
+    description: "Generate N-grams and extract word affixes (prefixes and suffixes).",
     language: "python",
-    tags: ["nltk", "chunking"],
-    code: `import nltk
-sentence = [("the", "DT"), ("little", "JJ"), ("yellow", "JJ"), ("dog", "NN")]
-grammar = "NP: {<DT>?<JJ>*<NN>}"
-cp = nltk.RegexpParser(grammar)
-result = cp.parse(sentence)
-print(result)`,
+    tags: ["nltk", "textblob", "n-grams"],
+    code: `from textblob import TextBlob
+sentence = "Technology is best when it brings people together"
+ngram_object = TextBlob(sentence)
+print(ngram_object.ngrams(n=2))`,
+    sections: [
+      {
+        title: "Bigram & Trigram",
+        code: `import nltk
+nltk.download('punkt')
+nltk.download('punkt_tab')
+from textblob import TextBlob
+
+sentence = "Technology is best when it brings people together"
+ngram_object = TextBlob(sentence)
+
+bigrams = ngram_object.ngrams(n=2) 
+print(f"Bigrams: {bigrams}")
+
+trigrams = ngram_object.ngrams(n=3) 
+print(f"Trigrams: {trigrams}")`,
+      },
+      {
+        title: "Suffix & Prefix",
+        code: `import random
+from collections import defaultdict
+
+def generate_word_ngrams(text, n):
+    words = text.split()
+    return list(zip(*[words[i:] for i in range(n)]))
+
+def build_word_ngram_model(text, n):
+    model = defaultdict(list)
+    ngrams = generate_word_ngrams(text, n)
+    for ngram in ngrams:
+        prefix = tuple(ngram[:-1])
+        suffix = ngram[-1]
+        model[prefix].append(suffix)
+    return model
+
+def generate_word_text(model, n, length=10):
+    prefix = random.choice(list(model.keys()))
+    generated = list(prefix)
+    print("\\n--- WORD GENERATION PROCESS ---")
+    for _ in range(length - n + 1):
+        suffixes = model.get(prefix, [])
+        if suffixes:
+            suffix = random.choice(suffixes)
+            print(f"Prefix {prefix} -> Suffix FOUND: {suffix}")
+            generated.append(suffix)
+            prefix = tuple(generated[-(n-1):])
+        else:
+            print(f"Prefix {prefix} -> NO SUFFIX FOUND")
+            break
+    return ' '.join(generated)
+
+def generate_char_ngrams(text, n):
+    return list(zip(*[text[i:] for i in range(n)]))
+
+def build_char_ngram_model(text, n):
+    model = defaultdict(list)
+    ngrams = generate_char_ngrams(text, n)
+    for ngram in ngrams:
+        prefix = tuple(ngram[:-1])
+        suffix = ngram[-1]
+        model[prefix].append(suffix)
+    return model
+
+def generate_char_text(model, n, length=50):
+    prefix = random.choice(list(model.keys()))
+    generated = ''.join(prefix)
+    print("\\n-- CHAR GENERATION PROCESS --")
+    for _ in range(length - n + 1):
+        suffixes = model.get(prefix, [])
+        if suffixes:
+            suffix = random.choice(suffixes)
+            print(f"Prefix {prefix} -> Suffix FOUND: {suffix}")
+            generated += suffix
+            prefix = tuple(generated[-(n-1):])
+        else:
+            print(f"Prefix {prefix} -> NO SUFFIX FOUND (switching prefix)")
+            prefix = random.choice(list(model.keys()))
+            continue
+    return generated
+
+text1 = "I am learning machine learning and natural language processing"
+n1 = 3
+word_model = build_word_ngram_model(text1, n1)
+print("Word N-gram Model:\\n", dict(word_model))
+print("Generated Word Text:", generate_word_text(word_model, n1, length=10))
+
+text2 = "hello world, welcome to the n-gram model!"
+n2 = 4
+char_model = build_char_ngram_model(text2, n2)
+print("\\nChar N-gram Model:\\n", dict(char_model))
+print("Generated Char Text:", generate_char_text(char_model, n2, length=50))`,
+      },
+      {
+        title: "Bi, Tri & Suffix",
+        code: `import nltk
+nltk.download('punkt')
+nltk.download('punkt_tab')
+from textblob import TextBlob
+
+sentence = "Technology is best when it brings people together"
+ngram_object = TextBlob(sentence)
+
+bigrams = ngram_object.ngrams(n=2) 
+print(f"Bigrams: {bigrams}")
+
+trigrams = ngram_object.ngrams(n=3) 
+print(f"Trigrams: {trigrams}")
+
+import random
+from collections import defaultdict
+
+def generate_word_ngrams(text, n):
+    words = text.split()
+    return list(zip(*[words[i:] for i in range(n)]))
+
+def build_word_ngram_model(text, n):
+    model = defaultdict(list)
+    ngrams = generate_word_ngrams(text, n)
+    for ngram in ngrams:
+        prefix = tuple(ngram[:-1])
+        suffix = ngram[-1]
+        model[prefix].append(suffix)
+    return model
+
+def generate_word_text(model, n, length=10):
+    prefix = random.choice(list(model.keys()))
+    generated = list(prefix)
+    print("\\n--- WORD GENERATION PROCESS ---")
+    for _ in range(length - n + 1):
+        suffixes = model.get(prefix, [])
+        if suffixes:
+            suffix = random.choice(suffixes)
+            print(f"Prefix {prefix} -> Suffix FOUND: {suffix}")
+            generated.append(suffix)
+            prefix = tuple(generated[-(n-1):])
+        else:
+            print(f"Prefix {prefix} -> NO SUFFIX FOUND")
+            break
+    return ' '.join(generated)
+
+def generate_char_ngrams(text, n):
+    return list(zip(*[text[i:] for i in range(n)]))
+
+def build_char_ngram_model(text, n):
+    model = defaultdict(list)
+    ngrams = generate_char_ngrams(text, n)
+    for ngram in ngrams:
+        prefix = tuple(ngram[:-1])
+        suffix = ngram[-1]
+        model[prefix].append(suffix)
+    return model
+
+def generate_char_text(model, n, length=50):
+    prefix = random.choice(list(model.keys()))
+    generated = ''.join(prefix)
+    print("\\n-- CHAR GENERATION PROCESS --")
+    for _ in range(length - n + 1):
+        suffixes = model.get(prefix, [])
+        if suffixes:
+            suffix = random.choice(suffixes)
+            print(f"Prefix {prefix} -> Suffix FOUND: {suffix}")
+            generated += suffix
+            prefix = tuple(generated[-(n-1):])
+        else:
+            print(f"Prefix {prefix} -> NO SUFFIX FOUND (switching prefix)")
+            prefix = random.choice(list(model.keys()))
+            continue
+    return generated
+
+text1 = "I am learning machine learning and natural language processing"
+n1 = 3
+word_model = build_word_ngram_model(text1, n1)
+print("Word N-gram Model:\\n", dict(word_model))
+print("Generated Word Text:", generate_word_text(word_model, n1, length=10))
+
+text2 = "hello world, welcome to the n-gram model!"
+n2 = 4
+char_model = build_char_ngram_model(text2, n2)
+print("\\nChar N-gram Model:\\n", dict(char_model))
+print("Generated Char Text:", generate_char_text(char_model, n2, length=50))`,
+      },
+    ],
   },
   {
     id: "prac-6",
