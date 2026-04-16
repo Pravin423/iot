@@ -297,16 +297,94 @@ except:
   },
   {
     id: "prac-4",
-    title: "Prac 4 (POS Tagging)",
-    description: "Part-of-speech tagging using NLTK.",
+    title: "Prac 4 (Edit Distance & Weighted Edit Distance)",
+    description: "Calculate standard Levenshtein distance and weighted edit distance between strings.",
     language: "python",
-    tags: ["nltk", "pos-tagging"],
-    code: `import nltk
-from nltk.tokenize import word_tokenize
-text = "NLTK is a leading platform for building Python programs."
-tokens = word_tokenize(text)
-tags = nltk.pos_tag(tokens)
-print(tags)`,
+    tags: ["nltk", "edit-distance", "algorithms"],
+    code: `def edit_distance(s1, s2):
+    m, n = len(s1), len(s2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m + 1): dp[i][0] = i 
+    for j in range(n + 1): dp[0][j] = j  
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] 
+            else:
+                dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1)
+    return dp[m][n]`,
+    sections: [
+      {
+        title: "Edit Distance",
+        code: `def edit_distance(s1, s2):
+    m, n = len(s1), len(s2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+    for i in range(m + 1):
+        dp[i][0] = i 
+    for j in range(n + 1):
+        dp[0][j] = j  
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] 
+            else:
+                dp[i][j] = min(
+                    dp[i - 1][j] + 1, 
+                    dp[i][j - 1] + 1,  
+                    dp[i - 1][j - 1] + 1 
+                )
+
+    print("Edit Distance Matrix:")
+    for row in dp:
+        print(row)
+
+    return dp[m][n]
+
+s1 = "kitten"
+s2 = "sitting"
+edit_distance_result = edit_distance(s1, s2)
+print("\\nEdit Distance:", edit_distance_result)`,
+      },
+      {
+        title: "Weighted Edit Distance",
+        code: `def weighted_edit_distance(s1, s2, ins_cost=1, del_cost=1, sub_cost=1):
+    m, n = len(s1), len(s2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+    for i in range(m + 1):
+        dp[i][0] = i * del_cost  
+    for j in range(n + 1):
+        dp[0][j] = j * ins_cost  
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1]  
+            else:
+                dp[i][j] = min(
+                    dp[i - 1][j] + del_cost,  
+                    dp[i][j - 1] + ins_cost,  
+                    dp[i - 1][j - 1] + sub_cost  
+                )
+
+    print("Weighted Edit Distance Matrix:")
+    for row in dp:
+        print(row)
+
+    return dp[m][n]
+
+s1 = "kitten"
+s2 = "sitting"
+insertion_cost = 1
+deletion_cost = 1
+substitution_cost = 2
+
+weighted_edit_distance_result = weighted_edit_distance(s1, s2, ins_cost=insertion_cost, del_cost=deletion_cost, sub_cost=substitution_cost)
+print("\\nWeighted Edit Distance:", weighted_edit_distance_result)`,
+      },
+    ],
   },
   {
     id: "prac-5",
