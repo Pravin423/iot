@@ -627,14 +627,63 @@ display(df_spacy)`,
   },
   {
     id: "prac-7",
-    title: "Prac 7 (Wordnet)",
-    description: "Exploring synsets and lemmas in WordNet.",
+    title: "Prac 7 (Text to Speech & Accuracy)",
+    description: "Convert text to speech, then back to text, and calculate accuracy.",
     language: "python",
-    tags: ["nltk", "wordnet"],
-    code: `from nltk.corpus import wordnet
-syn = wordnet.synsets("program")[0]
-print(syn.name())
-print(syn.definition())`,
+    tags: ["gtts", "speech-recognition", "colab"],
+    code: `!pip install gTTS SpeechRecognition pydub
+!apt-get install ffmpeg -y
+
+from gtts import gTTS
+from IPython.display import Audio
+from pydub import AudioSegment
+import speech_recognition as sr
+from google.colab import files
+from difflib import SequenceMatcher
+
+def text_to_speech(text):
+    tts = gTTS(text=text, lang='en')
+    tts.save("output.mp3")
+    return "output.mp3"
+
+text = "Hello, how are you doing today?"
+mp3_file = text_to_speech(text)
+
+display(Audio(mp3_file))
+
+def convert_mp3_to_wav(mp3_file, wav_file):
+    audio = AudioSegment.from_mp3(mp3_file)
+    audio.export(wav_file, format="wav")
+
+convert_mp3_to_wav(mp3_file, "output.wav")
+
+def speech_to_text(file_path):
+    recognizer = sr.Recognizer()
+    with sr.AudioFile(file_path) as source:
+        audio = recognizer.record(source)
+
+    try:
+        return recognizer.recognize_google(audio)
+    except:
+        return ""
+
+print("Upload WAV file:")
+uploaded = files.upload()
+
+recognized_text = ""
+
+for fn in uploaded.keys():
+    recognized_text = speech_to_text(fn)
+    print("Recognized Text:", recognized_text)
+
+def calculate_accuracy(original_text, recognized_text):
+    return SequenceMatcher(None, original_text.lower(), recognized_text.lower()).ratio() * 100
+
+if recognized_text:
+    accuracy = calculate_accuracy(text, recognized_text)
+    print(f"Accuracy: {accuracy:.2f}%")
+else:
+    print("No valid speech recognized.")`,
   },
   {
     id: "prac-8",
