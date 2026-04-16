@@ -689,15 +689,59 @@ else:
   },
   {
     id: "prac-8",
-    title: "Prac 8 (TF-IDF)",
-    description: "Compute TF-IDF values for a set of documents.",
+    title: "Prac 8 (Simple Chatbot)",
+    description: "A rule-based chatbot using regex and random responses.",
     language: "python",
-    tags: ["sklearn", "tfidf"],
-    code: `from sklearn.feature_extraction.text import TfidfVectorizer
-corpus = ["This is the first document.", "This document is the second document."]
-vectorizer = TfidfVectorizer()
-X = vectorizer.fit_transform(corpus)
-print(vectorizer.get_feature_names_out())`,
+    tags: ["python", "regex", "chatbot"],
+    code: `import random
+import re
+
+greetings = ['hi', 'hello', 'hey', 'hola']
+
+responses = {
+    'how are you': ['I am doing well, thank you!', 'I am fine! How about you?'],
+    'what is your name': ['I am a simple chatbot!', 'You can call me ChatBot.'],
+    'bye': ['Goodbye! Have a great day!', 'See you later!'],
+    'default': ["I'm not sure how to respond to that. Can you ask something else?"]
+}
+
+def clean_text(text):
+    return re.sub(r'[^\\w\\s]', '', text.lower())
+
+def greet(user_input):
+    for word in user_input.split():
+        if word in greetings:
+            return random.choice(['Hello!', 'Hi there!', 'Hey!'])
+    return None
+
+def get_response(user_input):
+    user_input = clean_text(user_input)
+
+    greeting_response = greet(user_input)
+    if greeting_response:
+        return greeting_response
+
+    for key in responses:
+        if key in user_input:
+            return random.choice(responses[key])
+
+    return random.choice(responses['default'])
+
+def chatbot():
+    print("Chatbot: Hi! How can I help you today? Type 'bye' to exit.")
+
+    while True:
+        user_input = input("You: ")
+
+        if clean_text(user_input) == 'bye':
+            print("Chatbot:", random.choice(responses['bye']))
+            break
+
+        response = get_response(user_input)
+        print("Chatbot:", response)
+
+if __name__ == "__main__":
+    chatbot()`,
   },
   {
     id: "prac-9",
