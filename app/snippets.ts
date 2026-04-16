@@ -581,7 +581,7 @@ print("Generated Char Text:", generate_char_text(char_model, n2, length=50))`,
   },
   {
     id: "prac-6",
-    title: "Prac 6 (Brown, Tagger, Spacy)",
+    title: "Prac 6 POS (Brown, Tagger, Spacy)",
     description: "POS tagging comparison using Brown, Perceptron, and Spacy models.",
     language: "python",
     tags: ["nltk", "spacy", "pos-tagging"],
