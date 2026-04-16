@@ -581,16 +581,49 @@ print("Generated Char Text:", generate_char_text(char_model, n2, length=50))`,
   },
   {
     id: "prac-6",
-    title: "Prac 6 (NER)",
-    description: "Named Entity Recognition using NLTK.",
+    title: "Prac 6 (Brown, Tagger, Spacy)",
+    description: "POS tagging comparison using Brown, Perceptron, and Spacy models.",
     language: "python",
-    tags: ["nltk", "ner"],
-    code: `import nltk
-sentence = "Apple is looking at buying U.K. startup for $1 billion"
+    tags: ["nltk", "spacy", "pos-tagging"],
+    code: `!pip install spacy pandas
+!python -m spacy download en_core_web_sm
+
+import nltk
+import spacy
+import pandas as pd
+from nltk.corpus import brown
+
+nltk.download('punkt')
+nltk.download('brown')
+nltk.download('universal_tagset')
+nltk.download('averaged_perceptron_tagger')
+
+sentence = "The quick brown fox jumps over the lazy dog."
+
 tokens = nltk.word_tokenize(sentence)
-pos_tags = nltk.pos_tag(tokens)
-chunks = nltk.ne_chunk(pos_tags)
-print(chunks)`,
+nltk_tags = nltk.pos_tag(tokens)
+
+df_nltk = pd.DataFrame(nltk_tags, columns=["Word", "POS Tag"])
+print("\\nNLTK POS TAGGING")
+display(df_nltk)
+
+brown_tagged = brown.tagged_sents(tagset='universal')[0]
+df_brown = pd.DataFrame(brown_tagged, columns=["Word", "Universal POS"])
+print("\\nBROWN CORPUS (UNIVERSAL TAGSET)")
+display(df_brown.head(15))
+
+nltk_perc = nltk.pos_tag(tokens)
+df_perc = pd.DataFrame(nltk_perc, columns=["Word", "Perceptron Tag"])
+print("\\nAVERAGED PERCEPTRON TAGGER")
+display(df_perc)
+
+nlp = spacy.load("en_core_web_sm")
+doc = nlp(sentence)
+
+spacy_data = [(token.text, token.pos_, token.dep_) for token in doc]
+df_spacy = pd.DataFrame(spacy_data, columns=["Word", "POS", "Dependency"])
+print("\\nSPACY POS TAGGING")
+display(df_spacy)`,
   },
   {
     id: "prac-7",
