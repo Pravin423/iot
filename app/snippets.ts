@@ -810,13 +810,174 @@ for filename in uploaded.keys():
   },
   {
     id: "prac-10",
-    title: "Prac 10 (Text Summarization)",
-    description: "Frequency-based text summarization.",
+    title: "Prac 10 (Emotion Detection)",
+    description: "Detect emotions in speech using Word2Vec and GloVe embedding models.",
     language: "python",
-    tags: ["nltk", "summarization"],
-    code: `# Frequency-based summarization logic
-import nltk
-from nltk.corpus import stopwords
-# ... placeholder for summarization`,
+    tags: ["whisper", "word2vec", "emotion-detection"],
+    code: `import whisper
+model = whisper.load_model("base")
+result = model.transcribe("sample.wav")
+print(result["text"])`,
+    sections: [
+      {
+        title: "Word2Vec Emotion",
+        code: `!pip install -q openai-whisper gensim scikit-learn gTTS
+!apt-get install -y ffmpeg
+
+from gtts import gTTS
+import whisper
+from gensim.models import Word2Vec
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+
+text = "I am very happy"
+tts = gTTS(text=text, lang='en')
+tts.save("sample.wav")
+
+print("Voice sample saved")
+
+model = whisper.load_model("base")
+
+result = model.transcribe("sample.wav")
+transcribed_text = result["text"]
+
+print("Transcribed Text:", transcribed_text)
+
+sentences = [
+    "I am extremely happy and joyful",
+    "This is a wonderful and exciting day",
+    "I feel cheerful and energetic",
+    "I feel very sad and depressed",
+    "I am feeling hopeless and tired",
+    "This makes me want to cry",
+    "I am angry and frustrated",
+    "This situation makes me furious",
+    "I am irritated and annoyed",
+    "I feel scared and afraid",
+    "This is terrifying and frightening",
+    "I am nervous and anxious"
+]
+
+tokenized = [s.lower().split() for s in sentences]
+
+w2v_model = Word2Vec(
+    sentences=tokenized,
+    vector_size=100,
+    window=5,
+    min_count=1,
+    workers=2,
+    epochs=100
+)
+
+def sentence_vector(sentence, model):
+    words = sentence.lower().split()
+    vectors = [model.wv[w] for w in words if w in model.wv]
+    return np.mean(vectors, axis=0) if vectors else np.zeros(model.vector_size)
+
+X = np.array([sentence_vector(s, w2v_model) for s in sentences])
+
+labels = [
+    "happy","happy","happy",
+    "sad","sad","sad",
+    "angry","angry","angry",
+    "fear","fear","fear"
+]
+
+clf = LogisticRegression(max_iter=1000)
+clf.fit(X, labels)
+
+print("Emotion classifier trained")
+
+if transcribed_text.strip() != "":
+    test_vector = sentence_vector(transcribed_text, w2v_model)
+    prediction = clf.predict([test_vector])[0]
+    print("Predicted Emotion:", prediction)
+else:
+    print("No speech detected")`,
+      },
+      {
+        title: "GloVe Module Emotion",
+        code: `!pip install gTTS SpeechRecognition pydub gensim
+!apt-get install -y ffmpeg
+
+from gtts import gTTS
+from pydub import AudioSegment
+import speech_recognition as sr
+import re
+import gensim.downloader as api
+import numpy as np
+from numpy.linalg import norm
+
+text = "I am feeling very sad and lonely today"
+tts = gTTS(text=text, lang='en')
+tts.save("sample.mp3")
+
+audio = AudioSegment.from_mp3("sample.mp3")
+audio = audio.set_frame_rate(16000).set_channels(1).set_sample_width(2)
+audio.export("sample.wav", format="wav")
+
+recognizer = sr.Recognizer()
+
+try:
+    with sr.AudioFile("sample.wav") as source:
+        audio_data = recognizer.record(source)
+    recognized_text = recognizer.recognize_google(audio_data)
+except:
+    recognized_text = ""
+
+print("Recognized Text:", recognized_text)
+
+def preprocess(text):
+    text = text.lower()
+    text = re.sub(r'[^a-z\\s]', '', text)
+    return text.split()
+
+tokens = preprocess(recognized_text)
+print("Tokens:", tokens)
+
+glove = api.load("glove-wiki-gigaword-100")
+
+def sentence_vector(tokens, model):
+    vectors = [model[word] for word in tokens if word in model]
+    if len(vectors) == 0:
+        return np.zeros(model.vector_size)
+    return np.mean(vectors, axis=0)
+
+sentence_vec = sentence_vector(tokens, glove)
+
+emotion_sentences = {
+    "happy": ["i am very happy", "this is a wonderful day"],
+    "sad": ["i feel sad", "i am lonely and depressed"],
+    "angry": ["i am angry", "this makes me furious"],
+    "neutral": ["it is a normal day", "nothing special today"]
+}
+
+emotion_vectors = {}
+
+for emotion, sentences in emotion_sentences.items():
+    vecs = []
+    for s in sentences:
+        vecs.append(sentence_vector(preprocess(s), glove))
+    emotion_vectors[emotion] = np.mean(vecs, axis=0)
+
+def cosine_similarity(a, b):
+    if norm(a) == 0 or norm(b) == 0:
+        return 0
+    return np.dot(a, b) / (norm(a) * norm(b))
+
+scores = {}
+
+for emotion, vec in emotion_vectors.items():
+    scores[emotion] = cosine_similarity(sentence_vec, vec)
+
+predicted_emotion = max(scores, key=scores.get)
+
+print("Emotion Scores:")
+for k, v in scores.items():
+    print(k, ":", round(v, 3))
+
+print("\\nPredicted Emotion:", predicted_emotion.upper())`,
+      },
+    ],
   },
 ];
