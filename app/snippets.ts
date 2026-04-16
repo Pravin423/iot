@@ -592,29 +592,31 @@ import nltk
 import spacy
 import pandas as pd
 from nltk.corpus import brown
+from IPython.display import display
 
 nltk.download('punkt')
+nltk.download('punkt_tab')
 nltk.download('brown')
 nltk.download('universal_tagset')
 nltk.download('averaged_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger_eng')
 
 sentence = "The quick brown fox jumps over the lazy dog."
 
 tokens = nltk.word_tokenize(sentence)
-nltk_tags = nltk.pos_tag(tokens)
 
+nltk_tags = nltk.pos_tag(tokens)
 df_nltk = pd.DataFrame(nltk_tags, columns=["Word", "POS Tag"])
-print("\\nNLTK POS TAGGING")
+print("NLTK POS TAGGING")
 display(df_nltk)
 
 brown_tagged = brown.tagged_sents(tagset='universal')[0]
 df_brown = pd.DataFrame(brown_tagged, columns=["Word", "Universal POS"])
-print("\\nBROWN CORPUS (UNIVERSAL TAGSET)")
+print("BROWN CORPUS (UNIVERSAL TAGSET)")
 display(df_brown.head(15))
 
-nltk_perc = nltk.pos_tag(tokens)
-df_perc = pd.DataFrame(nltk_perc, columns=["Word", "Perceptron Tag"])
-print("\\nAVERAGED PERCEPTRON TAGGER")
+df_perc = pd.DataFrame(nltk_tags, columns=["Word", "Perceptron Tag"])
+print("AVERAGED PERCEPTRON TAGGER")
 display(df_perc)
 
 nlp = spacy.load("en_core_web_sm")
@@ -622,7 +624,7 @@ doc = nlp(sentence)
 
 spacy_data = [(token.text, token.pos_, token.dep_) for token in doc]
 df_spacy = pd.DataFrame(spacy_data, columns=["Word", "POS", "Dependency"])
-print("\\nSPACY POS TAGGING")
+print("SPACY POS TAGGING")
 display(df_spacy)`,
   },
   {
