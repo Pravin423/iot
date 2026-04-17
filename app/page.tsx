@@ -8,8 +8,8 @@ export default function Home() {
         <div className="header-inner">
           <div className="logo-mark">{"{ }"}</div>
           <div>
-            <h1 className="site-title">my snippets</h1>
-            <p className="site-sub">click any card to copy its code</p>
+            <h1 className="site-title">pentest lab</h1>
+            <p className="site-sub">security snippets for ethical hacking</p>
           </div>
         </div>
         <div className="header-count">{snippets.length} snippets</div>

