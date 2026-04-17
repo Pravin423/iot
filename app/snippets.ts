@@ -86,21 +86,14 @@ Q. XMAS Scan = nmap -sX -T4 hp.com`,
   },
   {
     id: "prac-3",
-    title: "Prac 3: Web Vulnerability Scanning (Nikto)",
-    description: "Perform web server security scanning to identify dangerous files, outdated software, and other problems.",
+    title: "Prac 3: Enumeration tools NetBIOS",
+    description: "NetBIOS enumeration and network statistics commands for identifying network resources.",
     language: "bash",
-    tags: ["web-security", "vulnerability-scan", "nikto"],
-    code: `# Basic scan of a web server
-nikto -h http://example.com
+    tags: ["enumeration", "netbios", "network-security"],
+    code: `IP Range: 192.168.2.1-192.168.2.254
 
-# Scan specific port
-nikto -h 192.168.1.1 -p 8080
-
-# Scan using SSL
-nikto -h https://example.com -ssl
-
-# Export results to a file
-nikto -h http://example.com -o results.html -Format htm`,
+# Note: Run the following command as Administrator
+netstat -help`,
   },
   {
     id: "prac-4",
