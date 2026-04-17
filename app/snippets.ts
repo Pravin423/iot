@@ -117,7 +117,7 @@ admin' --
   },
   {
     id: "prac-5",
-    title: "Prac 5: System Hacking",
+    title: "Prac 5: System Hacking (dvwa, audit)",
     description: "Practice system hacking using DVWA and monitoring with Audit Policy (AuditPol).",
     language: "bash",
     tags: ["system-hacking", "dvwa", "auditpol", "windows-security"],
