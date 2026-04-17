@@ -27,10 +27,10 @@ inurl:facebook intext:ruia csit
 inurl:tutorialspoint intext:python filetype:pdf
 
 # 03. Display the images related to covid-19
-intitle:"covid-19" filetype:jpg
+intitle:"covid-19" filetype: jpg
 
 # 04. Display all video and audio files related to nasa
-intext:"nasa" filetype:mp4 || mp3
+intext:"nasa" filetype: mp4 || mp3
 
 # 05. Display today's weather of Poland
 weather:Poland
@@ -61,24 +61,28 @@ tracert google.com
   },
   {
     id: "prac-2",
-    title: "Prac 2: Network Scanning (Nmap)",
-    description: "Scan networks and systems to discover open ports, services, and operating systems.",
+    title: "Prac 2: Network Scanning tools(NMAP)",
+    description: "Specific Nmap commands for target scanning, port ranges, exclusion, and advanced scan types (SYN, ACK, FIN, NULL, XMAS).",
     language: "bash",
     tags: ["nmap", "scanning", "network-security"],
-    code: `# Basic scan of a single target
-nmap 192.168.1.1
+    code: `1) nmap www.google.com
+2) nmap www.ruiacollege.edu
 
-# Scan specific ports
-nmap -p 80,443,22 192.168.1.1
+Q. scan the ports in specific range of target
+1. nmap -p 1-100 www.google.com
+2. nmap -p 1-100 aws.amazon.com
 
-# Service and OS detection
-nmap -sV -O 192.168.1.1
+Q. scan a specific port on target machine
+Command: nmap -p 80 www.google.com
 
-# Aggressive scan (A) with timing (T4)
-nmap -A -T4 scanme.nmap.org
+Q. scan the ports by excluding the specific port
+Command: nmap www.google.com --exclude-ports 1-100
 
-# Stealth scan (Syn scan)
-sudo nmap -sS target.com`,
+ACK Scan = Command: nmap -sA -T4 nmap.org
+SYN Scan = nmap -sS -T4 caldera.com
+A FIN scan = nmap -sF -T4 acer.com
+A NULL scan = nmap -sN -T4 hp.com
+Q. XMAS Scan = nmap -sX -T4 hp.com`,
   },
   {
     id: "prac-3",
